@@ -1,0 +1,9 @@
+name: rankup
+version: 1.0
+author: Melle "Jubiman" Bosboom
+main: com.jubiman.rankup.Rankup
+prefix: RANKUP
+website: https://jubiman.com/
+commands:
+  rankup:
+    description: Opens the rankup menu.
