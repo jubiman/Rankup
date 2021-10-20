@@ -1,0 +1,8 @@
+database:
+  driver: sqlite
+  host: localhost
+  port: 3306
+  user: rankup
+  password: rankup
+  name: rankup
+  table_prefix: rankup_
