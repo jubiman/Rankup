@@ -1,11 +1,16 @@
 package com.jubiman.rankup.commands;
 
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagShort;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -34,32 +39,27 @@ public class CommandRankup implements CommandExecutor {
 					new ItemStack(Material.GOLD_BLOCK),
 					new ItemStack(Material.DIAMOND_BLOCK),
 					new ItemStack(Material.OBSIDIAN),
-					new ItemStack(Material.EMERALD_BLOCK),
-					// Prestige
-					new ItemStack(Material.BEDROCK)
 			};
 
 			// Create item metas
-			ItemMeta[] itemMetas = new ItemMeta[12];
-			for (int i=0; i<12; i++) {
+			ItemMeta[] itemMetas = new ItemMeta[11];
+			for (int i=0; i<ranks.length; i++) {
 				itemMetas[i] = ranks[i].getItemMeta();
 			}
 
 			// Create names and lores
 			// TODO: placeholders
 			String[] names = new String[]{
-					"Rank 1",
-					"Rank 2",
-					"Rank 3",
-					"Rank 4",
-					"Rank 5",
-					"Rank 6",
-					"Rank 7",
-					"Rank 8",
-					"Rank 9",
-					"Rank 10",
-					"Rank 11",
-					"Prestige"
+					"§dRank 1",
+					"§dRank 2",
+					"§dRank 3",
+					"§dRank 4",
+					"§dRank 5",
+					"§dRank 6",
+					"§dRank 7",
+					"§dRank 8",
+					"§dRank 9",
+					"§dRank 10"
 			};
 
 			String[][] lores = new String[][]{
@@ -91,13 +91,7 @@ public class CommandRankup implements CommandExecutor {
 							"§5The ninth rank, what a scrub are you..."
 					},
 					new String[]{
-							"§5The eleventh rank, what a scrub are you..."
-					},
-					new String[]{
-							"§5The twelfth rank, what a scrub are you..."
-					},
-					new String[]{
-							"§4Prestige. YOU FINALLY MADE IT HAHA"
+							"§5The tenth rank, what a scrub are you..."
 					}
 			};
 
@@ -109,8 +103,59 @@ public class CommandRankup implements CommandExecutor {
 				ranks[i].setItemMeta(itemMetas[i]);
 			}
 
-			for (int i=(27-(ranks.length/2)); i<(27+(ranks.length/2)); i++)
-				inv.setItem(i, ranks[i-(27-ranks.length/2)]);
+			//for (int i=(27-(ranks.length/2)); i<(27+(ranks.length/2)); i++)
+			//	inv.setItem(i, ranks[i-(27-ranks.length/2)]);
+			ItemStack filler = new ItemStack(Material.STAINED_GLASS_PANE);
+			filler.setDurability((short) 0xF); // Black
+
+			for (int i=0; i<54; ++i) {
+				if (i < 20) inv.setItem(i, filler);
+				else if (i < 25) inv.setItem(i, ranks[i-20]);
+				else if (i < 29) inv.setItem(i, filler);
+				else if (i < 34) inv.setItem(i, ranks[i-24]);
+				else inv.setItem(i, filler);
+			}
+
+			// Functional buttons
+			ItemStack close = new ItemStack(Material.BARRIER);
+			// Prestige
+			ItemStack prestige = new ItemStack(Material.BEDROCK);
+
+			// NBTTag stuff
+			net.minecraft.server.v1_8_R3.ItemStack nmsClose = CraftItemStack.asNMSCopy(close);
+			NBTTagCompound closeCompound = nmsClose.hasTag() ? nmsClose.getTag() : new NBTTagCompound();
+			net.minecraft.server.v1_8_R3.ItemStack nmsPrestige = CraftItemStack.asNMSCopy(prestige);
+			NBTTagCompound prestigeCompound = nmsPrestige.hasTag() ? nmsPrestige.getTag() : new NBTTagCompound();
+
+			// Add NBT tag for functionality
+			closeCompound.set("func", new NBTTagString("close"));
+			prestigeCompound.set("func", new NBTTagString("prestige"));
+
+			nmsClose.setTag(closeCompound);
+			close = CraftItemStack.asBukkitCopy(nmsClose);
+			nmsPrestige.setTag(prestigeCompound);
+			prestige = CraftItemStack.asBukkitCopy(nmsPrestige);
+
+			// Item meta
+			ItemMeta closeMeta = close.getItemMeta();
+			ItemMeta prestigeMeta = prestige.getItemMeta();
+
+			// Close button
+			closeMeta.setDisplayName("Close");
+
+			// Prestige button
+			String[] prestigeLore = new String[]{
+					"§4Prestige. YOU FINALLY MADE IT HAHA."
+			};
+
+			prestigeMeta.setDisplayName("§dPrestige");
+			prestigeMeta.setLore(Arrays.asList(prestigeLore));
+
+			close.setItemMeta(closeMeta);
+			prestige.setItemMeta(prestigeMeta);
+
+			inv.setItem(49, close);
+			inv.setItem(50, prestige);
 
 			// Set the inventory
 			player.openInventory(inv);
