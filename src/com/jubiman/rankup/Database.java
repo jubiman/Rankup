@@ -225,7 +225,6 @@ public class Database {
 		stmt.setLong(1, coins);
 		stmt.setString(2, uuid);
 		stmt.executeUpdate();
-		Rankup.getInstance().getLogger().info("IT WORKED");
 		Bukkit.getServer().getPluginManager().callEvent(new MoneyChangeEvent(Bukkit.getPlayer(UUID.fromString(uuid))));
 	}
 
@@ -252,10 +251,10 @@ public class Database {
 	public void updateAllFromUUID(String uuid, long coins, int rank, int prestige) throws SQLException {
 		String tableName = Rankup.getInstance().getConfig().getString("database.table_prefix") + "info";
 		PreparedStatement stmt = connection.prepareStatement(
-				"UPDATE " + tableName + " SET coins=coins-?,rank=?,prestige=? WHERE uuid=?");
+				"UPDATE " + tableName + " SET coins=?,rank=?,prestige=? WHERE uuid=?");
 		stmt.setLong(1, coins);
-		stmt.setLong(2, rank);
-		stmt.setLong(3, prestige);
+		stmt.setInt(2, rank);
+		stmt.setInt(3, prestige);
 		stmt.setString(4, uuid);
 		stmt.executeUpdate();
 	}
