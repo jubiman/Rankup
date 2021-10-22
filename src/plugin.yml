@@ -18,3 +18,11 @@ commands:
     description: 'Set or get your prestige.'
     usage: '/<command> <username> [set/add/remove] [amount]'
     aliases: [pres]
+  config:
+    description: 'Changes config'
+    usage: '/<command> <option> [new_value]'
+    aliases: [cfg]
+  getconfig:
+    description: 'Gets config'
+    usage: '/<command>'
+    aliases: [getcfg]

@@ -1,23 +1,22 @@
 package com.jubiman.rankup.commands;
 
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagShort;
-import net.minecraft.server.v1_8_R3.NBTTagString;
+import com.jubiman.rankup.Rankup;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.OptionalInt;
 
 public class CommandRankup implements CommandExecutor {
 	@Override
@@ -25,6 +24,20 @@ public class CommandRankup implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player)sender;
 			Inventory gui = Bukkit.createInventory(null, 54, ChatColor.AQUA + "RANK UP");
+
+			OptionalInt r, p;
+			int rank, prestige;
+			try {
+				r = Rankup.getDB().getRankFromUUID(player.getUniqueId().toString());
+				p = Rankup.getDB().getPrestigeFromUUID(player.getUniqueId().toString());
+				if(!r.isPresent() || !p.isPresent()) throw new SQLException();
+				rank = r.getAsInt();
+				prestige = p.getAsInt();
+			} catch (SQLException e) {
+				player.sendMessage("§cFailed to get player data.");
+				return true;
+			}
+			long upgrade_cost = (long)(2500 * (1 + rank) * (1 + (prestige * .25f)));
 
 			// Create ranks
 			ItemStack[] ranks = new ItemStack[]{
@@ -64,36 +77,81 @@ public class CommandRankup implements CommandExecutor {
 
 			String[][] lores = new String[][]{
 					new String[]{
-							"§5The first rank, what a scrub are you..."
+							"§5The first rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§b§lTHE FIRST RANK (IT'S FREE)"
 					},
 					new String[]{
-							"§5The second rank, what a scrub are you..."
+							"§5The second rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 2 ? (1-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (1-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The third rank, what a scrub are you..."
+							"§5The third rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 3 ? (2-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (2-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The fourth rank, what a scrub are you..."
+							"§5The fourth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 4 ? (3-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (3-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The fifth rank, what a scrub are you..."
+							"§5The fifth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 5 ? (4-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (4-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The sixth rank, what a scrub are you..."
+							"§5The sixth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 6 ? (5-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (5-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The seventh rank, what a scrub are you..."
+							"§5The seventh rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 7 ? (6-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (6-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The eighth rank, what a scrub are you..."
+							"§5The eighth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 8 ? (7-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (7-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The ninth rank, what a scrub are you..."
+							"§5The ninth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 9 ? (8-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (8-rank)))) : "§b§lALREADY PURCHASED")
 					},
 					new String[]{
-							"§5The tenth rank, what a scrub are you..."
+							"§5The tenth rank, what a scrub are you...",
+							"§5Gain access to:",
+							"§5    Bla bla bla.",
+							"",
+							"§5Upgrade cost: " + (rank < 10 ? (9-rank) == 0 ? "§b§lCURRENT RANK" : ("§6$" + (upgrade_cost + (2500L * (9-rank)))) : "§b§lALREADY PURCHASED")
 					}
 			};
+
+			// Make current rank glowing and update name
+			names[rank] = names[rank] + " §b§l(CURRENT)";
+			itemMetas[rank].addEnchant(Enchantment.WATER_WORKER, 1, true);
+			itemMetas[rank].addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
 			// Set name and lore
 			for (int i=0; i<ranks.length; i++) {
@@ -103,8 +161,6 @@ public class CommandRankup implements CommandExecutor {
 				ranks[i].setItemMeta(itemMetas[i]);
 			}
 
-			//for (int i=(27-(ranks.length/2)); i<(27+(ranks.length/2)); i++)
-			//	inv.setItem(i, ranks[i-(27-ranks.length/2)]);
 			ItemStack filler = new ItemStack(Material.STAINED_GLASS_PANE);
 			filler.setDurability((short) 0xF); // Black
 
@@ -119,28 +175,32 @@ public class CommandRankup implements CommandExecutor {
 			// Functional buttons
 			ItemStack close = new ItemStack(Material.BARRIER);
 			// Prestige
-			ItemStack prestige = new ItemStack(Material.BEDROCK);
+			ItemStack prestigeStack = new ItemStack(Material.BEDROCK);
 
 			// Item meta
 			ItemMeta closeMeta = close.getItemMeta();
-			ItemMeta prestigeMeta = prestige.getItemMeta();
+			ItemMeta prestigeMeta = prestigeStack.getItemMeta();
 
 			// Close button
-			closeMeta.setDisplayName("Close");
+			String[] closeLore = new String[]{
+					"Click here to close this menu"
+			};
+			closeMeta.setDisplayName("§4Close");
+			closeMeta.setLore(Arrays.asList(closeLore));
 
 			// Prestige button
 			String[] prestigeLore = new String[]{
-					"§4Prestige. YOU FINALLY MADE IT HAHA."
+					"§4You are prestige: §6" + prestige
 			};
 
 			prestigeMeta.setDisplayName("§dPrestige");
 			prestigeMeta.setLore(Arrays.asList(prestigeLore));
 
 			close.setItemMeta(closeMeta);
-			prestige.setItemMeta(prestigeMeta);
+			prestigeStack.setItemMeta(prestigeMeta);
 
 			gui.setItem(49, close);
-			gui.setItem(50, prestige);
+			gui.setItem(50, prestigeStack);
 
 			// Set the inventory
 			player.openInventory(gui);

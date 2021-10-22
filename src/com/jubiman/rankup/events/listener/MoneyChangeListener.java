@@ -30,12 +30,11 @@ public class MoneyChangeListener implements Listener {
 			// We want to calculate for the next rank, so (1 + rank)
 			long upgrade_cost = (long)(2500 * (1 + tmp_rank) * (1 + (tmp_prestige * .25f)));
 			while (tmp_coins > upgrade_cost) {
-				e.getPlayer().sendMessage(ChatColor.GREEN + "You ranked up to rank " + ChatColor.GOLD + (tmp_rank + 1) + ChatColor.GREEN + "! (" + ChatColor.GOLD + -upgrade_cost + ChatColor.GREEN + ")");
 				if (++tmp_rank > 10) {
 					tmp_rank = 0;
 					tmp_prestige++;
 					e.getPlayer().sendMessage(ChatColor.RED + "You hit prestige level " + ChatColor.GOLD + (tmp_prestige) + ChatColor.RED + "! (" + ChatColor.GOLD + -upgrade_cost + ChatColor.RED + ")");
-				}
+				} else e.getPlayer().sendMessage(ChatColor.GREEN + "You ranked up to rank " + ChatColor.GOLD + (tmp_rank + 1) + ChatColor.GREEN + "! (" + ChatColor.GOLD + -upgrade_cost + ChatColor.GREEN + ")");
 				tmp_coins -= upgrade_cost;
 				upgrade_cost = (long)(2500 * (1 + tmp_rank) * (1 + (tmp_prestige * .25f)));
 			}

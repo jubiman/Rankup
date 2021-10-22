@@ -1,21 +1,20 @@
 package com.jubiman.rankup;
 
-import com.jubiman.rankup.commands.CommandMoney;
-import com.jubiman.rankup.commands.CommandPrestige;
-import com.jubiman.rankup.commands.CommandRank;
-import com.jubiman.rankup.commands.CommandRankup;
-import com.jubiman.rankup.events.event.MoneyChangeEvent;
+import com.jubiman.rankup.commands.*;
 import com.jubiman.rankup.events.listener.ClickEventListener;
 import com.jubiman.rankup.events.listener.MoneyChangeListener;
 import com.jubiman.rankup.events.listener.PlayerJoinListener;
+
+import me.desht.dhutils.ConfigurationManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 
 public class Rankup extends JavaPlugin {
 	private static Rankup instance;
-
 	private static Database db;
+
+	private ConfigurationManager configManager;
 
 	@Override
 	public void onEnable() {
@@ -29,7 +28,9 @@ public class Rankup extends JavaPlugin {
 		registerEvents();
 		getLogger().info("Finished registering events.");
 
-		DirectoryStructure.setup(this);
+		// DHUtils stuff
+		DirectoryStructure.setup();
+		configManager = new ConfigurationManager(this);
 
 		// Connecting to database
 		try {
@@ -62,6 +63,8 @@ public class Rankup extends JavaPlugin {
 		getCommand("money").setExecutor(new CommandMoney());
 		getCommand("rank").setExecutor(new CommandRank());
 		getCommand("prestige").setExecutor(new CommandPrestige());
+		getCommand("config").setExecutor(new CommandConfig());
+		getCommand("getconfig").setExecutor(new CommandGetConfig());
 	}
 
 	private void registerEvents() {
@@ -79,5 +82,8 @@ public class Rankup extends JavaPlugin {
 
 	public static Database getDB() {
 		return db;
+	}
+	public ConfigurationManager getConfigManager() {
+		return configManager;
 	}
 }

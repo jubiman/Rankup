@@ -12,9 +12,8 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.UUID;
 
+@SuppressWarnings("SameParameterValue")
 public class Database {
-	private SupportedDrivers activeDriver;
-
 	enum SupportedDrivers {
 		MYSQL,
 		SQLITE
@@ -58,7 +57,6 @@ public class Database {
 			default:
 				throw new unsupportedDatabaseTypeException(dbType);
 		}
-		this.activeDriver = driver;
 		Rankup.getInstance().getLogger().info("Connected to DB: " + connection.getMetaData().getDatabaseProductName());
 	}
 
