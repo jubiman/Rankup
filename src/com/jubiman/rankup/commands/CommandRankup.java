@@ -61,7 +61,6 @@ public class CommandRankup implements CommandExecutor {
 			}
 
 			// Create names and lores
-			// TODO: placeholders
 			String[] names = new String[]{
 					"§dRank 1",
 					"§dRank 2",

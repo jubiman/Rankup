@@ -22,14 +22,8 @@ public class ClickEventListener implements Listener {
 				case GOLD_BLOCK:
 				case DIAMOND_BLOCK:
 				case OBSIDIAN:
+				case BEDROCK:
 					break;
-				case BEDROCK: {
-					// TODO: Prestige
-					// rank = 0
-					// Coins -= ahwy8ubfyuabf
-					// SQL stuff as well :(
-					break;
-				}
 				case BARRIER: {
 					player.closeInventory();
 					break;
