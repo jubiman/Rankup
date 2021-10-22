@@ -1,16 +1,21 @@
 package com.jubiman.rankup;
 
+import com.jubiman.rankup.commands.CommandMoney;
+import com.jubiman.rankup.commands.CommandPrestige;
+import com.jubiman.rankup.commands.CommandRank;
 import com.jubiman.rankup.commands.CommandRankup;
-import org.bukkit.plugin.PluginManager;
+import com.jubiman.rankup.events.event.MoneyChangeEvent;
+import com.jubiman.rankup.events.listener.ClickEventListener;
+import com.jubiman.rankup.events.listener.MoneyChangeListener;
+import com.jubiman.rankup.events.listener.PlayerJoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class Rankup extends JavaPlugin {
 	private static Rankup instance;
 
-	private Database db;
+	private static Database db;
 
 	@Override
 	public void onEnable() {
@@ -19,6 +24,10 @@ public class Rankup extends JavaPlugin {
 		getLogger().info("Registering commands...");
 		registerCommands();
 		getLogger().info("Finished registering commands.");
+
+		getLogger().info("Registering events...");
+		registerEvents();
+		getLogger().info("Finished registering events.");
 
 		DirectoryStructure.setup(this);
 
@@ -49,7 +58,16 @@ public class Rankup extends JavaPlugin {
 	}
 
 	private void registerCommands() {
-		this.getCommand("rankup").setExecutor(new CommandRankup());
+		getCommand("rankup").setExecutor(new CommandRankup());
+		getCommand("money").setExecutor(new CommandMoney());
+		getCommand("rank").setExecutor(new CommandRank());
+		getCommand("prestige").setExecutor(new CommandPrestige());
+	}
+
+	private void registerEvents() {
+		getServer().getPluginManager().registerEvents(new ClickEventListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+		getServer().getPluginManager().registerEvents(new MoneyChangeListener(), this);
 	}
 
 	private void setInstance(Rankup inst) {
@@ -57,5 +75,9 @@ public class Rankup extends JavaPlugin {
 	}
 	public static Rankup getInstance() {
 		return instance;
+	}
+
+	public static Database getDB() {
+		return db;
 	}
 }

@@ -24,7 +24,7 @@ public class CommandRankup implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player)sender;
-			Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BLUE +  "RANK UP");
+			Inventory gui = Bukkit.createInventory(null, 54, ChatColor.AQUA + "RANK UP");
 
 			// Create ranks
 			ItemStack[] ranks = new ItemStack[]{
@@ -109,32 +109,17 @@ public class CommandRankup implements CommandExecutor {
 			filler.setDurability((short) 0xF); // Black
 
 			for (int i=0; i<54; ++i) {
-				if (i < 20) inv.setItem(i, filler);
-				else if (i < 25) inv.setItem(i, ranks[i-20]);
-				else if (i < 29) inv.setItem(i, filler);
-				else if (i < 34) inv.setItem(i, ranks[i-24]);
-				else inv.setItem(i, filler);
+				if (i < 20) gui.setItem(i, filler);
+				else if (i < 25) gui.setItem(i, ranks[i-20]);
+				else if (i < 29) gui.setItem(i, filler);
+				else if (i < 34) gui.setItem(i, ranks[i-24]);
+				else gui.setItem(i, filler);
 			}
 
 			// Functional buttons
 			ItemStack close = new ItemStack(Material.BARRIER);
 			// Prestige
 			ItemStack prestige = new ItemStack(Material.BEDROCK);
-
-			// NBTTag stuff
-			net.minecraft.server.v1_8_R3.ItemStack nmsClose = CraftItemStack.asNMSCopy(close);
-			NBTTagCompound closeCompound = nmsClose.hasTag() ? nmsClose.getTag() : new NBTTagCompound();
-			net.minecraft.server.v1_8_R3.ItemStack nmsPrestige = CraftItemStack.asNMSCopy(prestige);
-			NBTTagCompound prestigeCompound = nmsPrestige.hasTag() ? nmsPrestige.getTag() : new NBTTagCompound();
-
-			// Add NBT tag for functionality
-			closeCompound.set("func", new NBTTagString("close"));
-			prestigeCompound.set("func", new NBTTagString("prestige"));
-
-			nmsClose.setTag(closeCompound);
-			close = CraftItemStack.asBukkitCopy(nmsClose);
-			nmsPrestige.setTag(prestigeCompound);
-			prestige = CraftItemStack.asBukkitCopy(nmsPrestige);
 
 			// Item meta
 			ItemMeta closeMeta = close.getItemMeta();
@@ -154,11 +139,11 @@ public class CommandRankup implements CommandExecutor {
 			close.setItemMeta(closeMeta);
 			prestige.setItemMeta(prestigeMeta);
 
-			inv.setItem(49, close);
-			inv.setItem(50, prestige);
+			gui.setItem(49, close);
+			gui.setItem(50, prestige);
 
 			// Set the inventory
-			player.openInventory(inv);
+			player.openInventory(gui);
 			return true;
 		}
 		return false;

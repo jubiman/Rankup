@@ -7,3 +7,14 @@ website: 'https://jubiman.com/'
 commands:
   rankup:
     description: 'Opens the rankup menu.'
+  money:
+    description: 'Check, set, add or remove money from an account.'
+    usage: '/<command> <username> [add/remove/set] [amount]'
+    aliases: [bal, balance]
+  rank:
+    description: 'Set or get your rank.'
+    usage: '/<command> <username> [set/add/remove] [amount]'
+  prestige:
+    description: 'Set or get your prestige.'
+    usage: '/<command> <username> [set/add/remove] [amount]'
+    aliases: [pres]
