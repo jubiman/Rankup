@@ -1,7 +1,7 @@
 package com.jubiman.rankup;
 
 import com.jubiman.rankup.events.event.MoneyChangeEvent;
-import com.jubiman.rankup.exeptions.unsupportedDatabaseTypeException;
+import com.jubiman.rankup.exeptions.UnsupportedDatabaseTypeException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -55,7 +55,7 @@ public class Database {
 				setupTablesSQLite();
 				break;
 			default:
-				throw new unsupportedDatabaseTypeException(dbType);
+				throw new UnsupportedDatabaseTypeException(dbType);
 		}
 		Rankup.getInstance().getLogger().info("Connected to DB: " + connection.getMetaData().getDatabaseProductName());
 	}
